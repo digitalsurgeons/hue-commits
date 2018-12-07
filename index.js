@@ -50,10 +50,10 @@ if (argv.findBridge) {
     displayResult(config)
   })
 } else {
-  setRandomColor(3)
+  setRandomColor(3, flashLight(3, 3), setBrightness(3, 20))
 }
 
-function setRandomColor(light) {
+function setRandomColor(light, cb = () => {}) {
   api.setLightState(
     light,
     HueLightState.create()
@@ -64,21 +64,57 @@ function setRandomColor(light) {
         console.log(JSON.stringify(err, null, 2))
         throw err
       }
+
+      setTimeout(() => {
+        cb()
+      }, 2000)
     }
   )
 }
 
-function flashLight(light) {
+function flashLight(light, times = 1, cb = () => {}) {
+  let i = 0
+  flash()
+  function flash() {
+    api.setLightState(
+      light,
+      HueLightState.create()
+        .on()
+        .shortAlert(),
+      function(err, lights) {
+        if (err) {
+          console.log(JSON.stringify(err, null, 2))
+          throw err
+        }
+        if (i < times - 1) {
+          i++
+          setTimeout(() => {
+            flash()
+          }, 1000)
+        } else {
+          setTimeout(() => {
+            cb()
+          }, 1000)
+        }
+      }
+    )
+  }
+}
+
+function setBrightness(light, brightness = 100, cb = () => {}) {
   api.setLightState(
     light,
     HueLightState.create()
       .on()
-      .longAlert(),
+      .brightness(brightness),
     function(err, lights) {
       if (err) {
         console.log(JSON.stringify(err, null, 2))
         throw err
       }
+      setTimeout(() => {
+        cb()
+      }, 1000)
     }
   )
 }
