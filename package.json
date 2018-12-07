@@ -1,0 +1,8 @@
+{
+  "name": "hue-commits",
+  "version": "0.0.0",
+  "description": "Change color of lights based on GitLab activity",
+  "main": "index.js",
+  "author": "Adam Chambers <@chambaz>",
+  "license": "ISC"
+}
