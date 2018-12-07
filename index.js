@@ -1,4 +1,5 @@
 const argv = require('yargs').argv
+const randomColor = require('random-color')
 const hue = require('node-hue-api')
 const HueApi = hue.HueApi
 const HueLightState = hue.lightState
@@ -49,22 +50,27 @@ if (argv.findBridge) {
     displayResult(config)
   })
 } else {
-  // set light color
-  // api.setLightState(
-  //   3,
-  //   HueLightState.create()
-  //     .on()
-  //     .rgb(255, 192, 203),
-  //   function(err, lights) {
-  //     if (err) {
-  //       console.log(JSON.stringify(err, null, 2))
-  //       throw err
-  //     }
-  //   }
-  // )
+  setRandomColor(3)
+}
 
+function setRandomColor(light) {
   api.setLightState(
-    3,
+    light,
+    HueLightState.create()
+      .on()
+      .rgb(...randomColor(0.3, 0.99).values.rgb),
+    function(err, lights) {
+      if (err) {
+        console.log(JSON.stringify(err, null, 2))
+        throw err
+      }
+    }
+  )
+}
+
+function flashLight(light) {
+  api.setLightState(
+    light,
     HueLightState.create()
       .on()
       .longAlert(),
