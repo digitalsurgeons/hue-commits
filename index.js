@@ -1,4 +1,7 @@
 const argv = require('yargs').argv
+const socket = require('socket.io-client')(
+  'http://commits.digitalsurgeonsdev.com:8000'
+)
 const randomColor = require('random-color')
 const hue = require('node-hue-api')
 const HueApi = hue.HueApi
@@ -52,6 +55,10 @@ if (argv.findBridge) {
 } else {
   setRandomColor(3, flashLight(3, 3), setBrightness(3, 20))
 }
+
+socket.on('event', data => {
+  setRandomColor(3, flashLight(3, 3), setBrightness(3, 20))
+})
 
 function setRandomColor(light, cb = () => {}) {
   api.setLightState(
