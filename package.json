@@ -4,5 +4,8 @@
   "description": "Change color of lights based on GitLab activity",
   "main": "index.js",
   "author": "Adam Chambers <@chambaz>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "node-hue-api": "~2.4.4"
+  }
 }
